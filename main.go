@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./infrastructure"
+	"github.com/wakashiyo/lazywak/infrastructure"
 )
 
 func main() {

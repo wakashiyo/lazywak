@@ -1,15 +1,16 @@
 package webapi
 
 import (
+	"context"
+	"fmt"
+	"io"
 	"net/http"
 	"net/url"
-	"context"
-	"io"
 	"path"
 )
 
 type Client struct {
-	URL	*url.URL
+	URL        *url.URL
 	HTTPClient *http.Client
 }
 
@@ -19,7 +20,7 @@ func newClient(endpointURL string, httpClient *http.Client) (*Client, error) {
 		return nil, err
 	}
 	client := &Client{
-		URL: parsedURL,
+		URL:        parsedURL,
 		HTTPClient: httpClient,
 	}
 	return client, nil
@@ -38,4 +39,18 @@ func (c *Client) newRequest(ctx context.Context, method string, subPath string, 
 
 	req.Header.Set("Content-Type", "application/json")
 	return req, nil
+}
+
+func (c *Client) call(ctx context.Context, pathParam string) error {
+	req, err := c.newRequest(ctx, "GET", "/items", nil)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.HTTPClient.Do(req)
+	if err != nil {
+		return err
+	}
+	fmt.Println(res)
+	return nil
 }
